@@ -16,6 +16,8 @@ import {
   DialogTitle,
   TextField,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useInsertPlates } from "../../hooks/useInsertPlates";
 import { usePlates } from "../../hooks/usePlates";
@@ -26,6 +28,9 @@ export const Home = () => {
   const { plates, isLoading, fetchPlates } = usePlates();
   const [isUpdated, setIsUpdated] = useState(false);
   const { insertPlate, isLoadingPlate, error } = useInsertPlates();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     if (!isUpdated) {
@@ -52,12 +57,21 @@ export const Home = () => {
   };
 
   return (
-    <Stack>
+    <Stack sx={{ padding: isMobile ? 2 : 3 }}>
       <Stack gap={2}>
-        <Typography fontSize={24} fontWeight={700} textAlign="center">
+        <Typography
+          fontSize={isMobile ? 20 : 24}
+          fontWeight={700}
+          textAlign="center"
+        >
           List of cars
         </Typography>
-        <Button variant="contained" color="primary" onClick={handleOpen}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleOpen}
+          fullWidth={isMobile}
+        >
           Add new plate
         </Button>
       </Stack>
@@ -100,7 +114,7 @@ export const Home = () => {
           )}
         </TableContainer>
       </Stack>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Add New Plate</DialogTitle>
         <DialogContent>
           <TextField
@@ -121,7 +135,7 @@ export const Home = () => {
             color="primary"
             disabled={!newPlate.trim() || isLoadingPlate}
           >
-            Add
+            {isLoadingPlate ? <CircularProgress size={24} /> : "Add"}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,7 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from "react";
-import Tabs from "@mui/material/Tabs";
-import Box from "@mui/material/Box";
+import React, { useState } from "react";
+import {
+  Box,
+  Drawer,
+  IconButton,
+  Tabs,
+  Tab,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { CustomTabPanel } from "../CustomTabPanel";
 
 type Props = {
   listTabs: {
@@ -19,33 +27,80 @@ function a11yProps(index: number) {
 }
 
 export const TabsUi = ({ listTabs }: Props) => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleChange = (newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    if (isMobile) {
+      setDrawerOpen(false);
+    }
   };
+
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+      setDrawerOpen(open);
+    };
+
+  const tabList = (
+    <Tabs
+      orientation={isMobile ? "vertical" : "horizontal"}
+      value={value}
+      onChange={handleChange}
+      variant={isMobile ? "fullWidth" : "standard"}
+      sx={{ textTransform: "capitalize" }}
+    >
+      {listTabs?.map((Item, index) => (
+        <Tab key={index} label={Item.name} {...a11yProps(index)} />
+      ))}
+    </Tabs>
+  );
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box
-        sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}
-        mb={2}
-      >
-        <Tabs value={value}>
-          {listTabs?.map((Item, index) => (
-            <>
-              {React.cloneElement(<Item.tab />, {
-                ...a11yProps(index),
-                label: Item?.name,
-                onClick: () => handleChange(index),
-                sx: { textTransform: "capitalize" },
-              })}
-            </>
-          ))}
-        </Tabs>
-      </Box>
+      {isMobile ? (
+        <>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+            sx={{ ml: 2, mt: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+            <Box
+              sx={{ width: 250 }}
+              role="presentation"
+              onClick={toggleDrawer(false)}
+              onKeyDown={toggleDrawer(false)}
+            >
+              {tabList}
+            </Box>
+          </Drawer>
+        </>
+      ) : (
+        <Box
+          sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}
+          mb={2}
+        >
+          {tabList}
+        </Box>
+      )}
       {listTabs?.map((Item, index) => (
-        <>{React.cloneElement(<Item.resultTab />, { value: value, index })}</>
+        <CustomTabPanel key={index} value={value} index={index}>
+          {<Item.resultTab />}
+        </CustomTabPanel>
       ))}
     </Box>
   );
