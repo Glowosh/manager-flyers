@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 import {
   Drawer,
   List,
@@ -7,9 +7,9 @@ import {
   ListItemText,
   Stack,
   Box,
-} from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { clearStorage } from '../../utils/storage';
+} from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { clearStorage } from "../../utils/storage";
 
 const drawerWidth = 240;
 
@@ -18,18 +18,8 @@ type Props = {
 };
 
 const listPages = [
-  { name: 'Home', path: '/dashboard' },
-  { name: 'Users', path: '/dashboard/users' },
-  { name: 'Validate Wosher', path: '/dashboard/validate-user' },
-  { name: 'Cleaning Requests', path: '/dashboard/cleaning-request' },
-  { name: 'Logout', path: '#' },
-  // { name: 'Bookings', path: '#' },
-  // { name: 'Work Zones', path: '#' },
-  // { name: 'Woshers Availability', path: '#' },
-  // { name: 'Revenue per Day', path: '#' },
-  // { name: 'Revenue per Month', path: '#' },
-  // { name: 'New Users this week', path: '#' },
-  // { name: 'New Users this month', path: '#' },
+  { name: "Home", path: "/dashboard" },
+  { name: "Logout", path: "#" },
 ];
 
 export const Dashboard = ({ children }: Props) => {
@@ -39,7 +29,7 @@ export const Dashboard = ({ children }: Props) => {
   return (
     <Stack direction="row" width="100%">
       <Stack height="100vh" bgcolor="primary.light">
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: "flex" }}>
           <Drawer
             variant="permanent"
             sx={{
@@ -47,8 +37,8 @@ export const Dashboard = ({ children }: Props) => {
               flexShrink: 0,
               [`& .MuiDrawer-paper`]: {
                 width: drawerWidth,
-                boxSizing: 'border-box',
-                bgcolor: 'primary.light',
+                boxSizing: "border-box",
+                bgcolor: "primary.light",
               },
             }}
           >
@@ -61,21 +51,21 @@ export const Dashboard = ({ children }: Props) => {
               />
             </Stack>
 
-            <Stack sx={{ overflow: 'auto' }}>
+            <Stack sx={{ overflow: "auto" }}>
               <List>
                 {listPages?.map((item) => (
                   <ListItem
                     key={item?.name}
                     disablePadding
                     sx={{
-                      bgcolor: pathname === item?.path ? 'primary.main' : '',
+                      bgcolor: pathname === item?.path ? "primary.main" : "",
                     }}
                   >
                     <ListItemButton
                       onClick={() => {
-                        if (item?.path === '#') {
+                        if (item?.path === "#") {
                           clearStorage();
-                          navigate('/');
+                          navigate("/");
                           return;
                         }
                         navigate(item?.path);
@@ -84,7 +74,7 @@ export const Dashboard = ({ children }: Props) => {
                       <ListItemText
                         primary={item?.name}
                         sx={{
-                          color: pathname === item?.path ? 'white' : '',
+                          color: pathname === item?.path ? "white" : "",
                         }}
                       />
                     </ListItemButton>
