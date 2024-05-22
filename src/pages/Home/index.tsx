@@ -17,7 +17,6 @@ import {
   TextField,
   CircularProgress,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import { useInsertPlates } from "../../hooks/useInsertPlates";
 import { usePlates } from "../../hooks/usePlates";
@@ -35,8 +34,7 @@ export const Home = () => {
     message: "",
   });
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery("(max-width: 1130px)");
 
   useEffect(() => {
     if (!isUpdated) {
@@ -110,7 +108,10 @@ export const Home = () => {
               <CircularProgress />
             </Stack>
           ) : (
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table
+              sx={{ minWidth: isMobile ? "100%" : 650 }}
+              aria-label="simple table"
+            >
               <TableHead>
                 <TableRow>
                   <TableCell>Car Plate</TableCell>
