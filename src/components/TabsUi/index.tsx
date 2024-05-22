@@ -32,7 +32,7 @@ export const TabsUi = ({ listTabs }: Props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
     if (isMobile) {
       setDrawerOpen(false);

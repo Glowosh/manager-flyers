@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Paper,
@@ -28,7 +28,7 @@ export const Home = () => {
   const [newPlate, setNewPlate] = useState("");
   const { plates, isLoading, fetchPlates } = usePlates();
   const [isUpdated, setIsUpdated] = useState(false);
-  const { insertPlate, isLoadingPlate, error } = useInsertPlates();
+  const { insertPlate, isLoadingPlate } = useInsertPlates();
   const [toastOpen, setToastOpen] = useState({
     success: false,
     open: false,
