@@ -13,12 +13,18 @@ export const useInsertPlates = () => {
   const insertPlate = useCallback(async (plateNumber: string) => {
     setIsLoadingPlate(true);
     setError(null);
+    const newPlateNumber = plateNumber
+      .toUpperCase()
+      .replace(/-/g, "")
+      .replace(/\./g, "")
+      .replace(/\s+/g, "")
+      .trim();
 
     try {
       const { data: existingPlates, error: fetchError } = await supabase
         .from("list_flyers")
         .select("*")
-        .eq("plate_number", plateNumber);
+        .eq("plate_number", newPlateNumber);
 
       if (fetchError) {
         throw fetchError;
@@ -32,22 +38,25 @@ export const useInsertPlates = () => {
         const daysDifference = dateDiffInDays(lastUpdateDate, currentDate);
 
         if (daysDifference < 7) {
-          alert(
-            "Plate number cannot be added. It's been less than 7 days since the last update."
-          );
-          return null;
+          return {
+            success: false,
+            text: "Plate number cannot be added. It's been less than 7 days since the last update.",
+          };
         }
       }
 
-      const { data, error: insertError } = await supabase
+      const { error: insertError } = await supabase
         .from("list_flyers")
-        .insert([{ plate_number: plateNumber }]);
+        .insert([{ plate_number: newPlateNumber }]);
 
       if (insertError) {
         throw insertError;
       }
 
-      return data;
+      return {
+        success: true,
+        text: "Plate number added successfully.",
+      };
     } catch (error) {
       setError((error as Error).message);
       alert(`Error inserting plate: ${(error as Error).message}`);

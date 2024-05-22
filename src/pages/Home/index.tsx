@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { useInsertPlates } from "../../hooks/useInsertPlates";
 import { usePlates } from "../../hooks/usePlates";
+import { Toast } from "../../components/Toast";
 
 export const Home = () => {
   const [open, setOpen] = useState(false);
@@ -28,6 +29,11 @@ export const Home = () => {
   const { plates, isLoading, fetchPlates } = usePlates();
   const [isUpdated, setIsUpdated] = useState(false);
   const { insertPlate, isLoadingPlate, error } = useInsertPlates();
+  const [toastOpen, setToastOpen] = useState({
+    success: false,
+    open: false,
+    message: "",
+  });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -49,15 +55,33 @@ export const Home = () => {
   };
 
   const handleAddPlate = async () => {
-    if (newPlate.trim()) {
-      await insertPlate(newPlate);
+    setToastOpen({
+      message: "",
+      success: false,
+      open: false,
+    });
+    const response = await insertPlate(newPlate);
+    setToastOpen({
+      message: response?.text as string,
+      success: response?.success as boolean,
+      open: true,
+    });
+    if (response?.success) {
       setIsUpdated(false);
       handleClose();
+      return;
     }
   };
 
   return (
-    <Stack sx={{ padding: isMobile ? 2 : 3 }}>
+    <Stack width={"100%"} sx={{ padding: isMobile ? 2 : 3 }}>
+      {toastOpen.open && (
+        <Toast
+          isOpen={toastOpen.open}
+          type={toastOpen.success ? "success" : "error"}
+          message={toastOpen.message}
+        />
+      )}
       <Stack gap={2}>
         <Typography
           fontSize={isMobile ? 20 : 24}
@@ -71,18 +95,22 @@ export const Home = () => {
           color="primary"
           onClick={handleOpen}
           fullWidth={isMobile}
+          sx={{
+            maxWidth: isMobile ? "100%" : "170px",
+            alignSelf: "flex-end",
+          }}
         >
           Add new plate
         </Button>
       </Stack>
       <Stack mt={2}>
-        <TableContainer component={Paper}>
+        <TableContainer sx={{ width: "100%" }} component={Paper}>
           {isLoading ? (
             <Stack sx={{ padding: 3, alignItems: "center" }}>
               <CircularProgress />
             </Stack>
           ) : (
-            <Table sx={{ minWidth: 350 }} aria-label="simple table">
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell>Car Plate</TableCell>
