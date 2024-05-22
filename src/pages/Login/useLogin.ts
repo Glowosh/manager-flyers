@@ -48,7 +48,7 @@ export const useLogin = () => {
         .select("*")
         .eq("user_id", data?.user.id);
 
-      if (profileData?.[0]?.role === "admin") {
+      if (["wosher", "admin"].includes(profileData?.[0]?.role)) {
         setStorage("@access_token", data?.session?.access_token);
         setStorage("@refresh_token", data?.session?.refresh_token);
         setFeedback("success");

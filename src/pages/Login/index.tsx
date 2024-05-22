@@ -1,26 +1,26 @@
-import { Button, CircularProgress, Stack } from '@mui/material';
-import { useLogin } from './useLogin';
-import { InputForm } from '../../components/InputForm';
-import { Toast } from '../../components/Toast';
+import { Button, CircularProgress, Stack } from "@mui/material";
+import { useLogin } from "./useLogin";
+import { InputForm } from "../../components/InputForm";
+import { Toast } from "../../components/Toast";
 
 export const Login = () => {
   const { feedback, handleSubmit, isLoading, onSubmit, register, errors } =
     useLogin();
 
-  const feedbackSuccess = feedback == 'success';
+  const feedbackSuccess = feedback == "success";
 
   return (
     <Stack height="100vh" bgcolor="primary.light">
       {feedback && (
         <Toast
           isOpen
-          type={feedbackSuccess ? 'success' : 'error'}
+          type={feedbackSuccess ? "success" : "error"}
           message={
             feedbackSuccess
-              ? 'Welcome to the manager!'
-              : feedback === 'not-exist'
-              ? 'User does not exist!'
-              : 'Unauthorized user!'
+              ? "Welcome to the Manager Flyer!"
+              : feedback === "not-exist"
+              ? "User does not exist!"
+              : "Unauthorized user!"
           }
         />
       )}
@@ -59,10 +59,10 @@ export const Login = () => {
                 height: 40,
                 width: 150,
                 mt: 2,
-                textTransform: 'capitalize',
+                textTransform: "capitalize",
               }}
             >
-              {isLoading ? <CircularProgress size={20} /> : 'Login'}
+              {isLoading ? <CircularProgress size={20} /> : "Login"}
             </Button>
           </Stack>
         </form>
