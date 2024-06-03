@@ -81,7 +81,7 @@ export const useInsertPlates = () => {
         : await supabase.from("list_flyers").insert([
             {
               plate_number: newPlateNumber,
-              lastPlate: getCurrentTimestampWithTimezone(),
+              last_update: getCurrentTimestampWithTimezone(),
             },
           ]);
 
